@@ -8,7 +8,7 @@ use App\Http\Requests\UpdateBookRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
 
-class BookController extends Controller
+class BooksController extends Controller
 {
     /**
      * Display a listing of the resource.
