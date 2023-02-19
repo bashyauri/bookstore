@@ -9,11 +9,19 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
+    // created a pivot table
     public function up(): void
     {
         Schema::create('book_author', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->unsignedBigInteger('author_id');
+            $table->foreign('author_id')->references('id')
+            ->on('authors')
+            ->cascade('delete');
+
+            $table->unsignedBigInteger('book_id');
+            $table->foreign('book_id')->references('id')
+            ->on('books')
+            ->cascade('delete');
         });
     }
 
