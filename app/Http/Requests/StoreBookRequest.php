@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StoreBookRequest extends FormRequest
@@ -11,7 +12,7 @@ class StoreBookRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,10 @@ class StoreBookRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|unique:books|max:255',
+            'description' => 'required',
+            'publication_year' => 'required',
+
         ];
     }
 }
