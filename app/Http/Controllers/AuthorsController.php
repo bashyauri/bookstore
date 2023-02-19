@@ -8,15 +8,16 @@ use App\Http\Requests\UpdateAuthorRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Response;
+use App\Http\Resources\AuthorsResource;
 
 class AuthorsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(): object
     {
-
+        return AuthorsResource::collection(Author::all());
     }
 
     /**
@@ -24,33 +25,27 @@ class AuthorsController extends Controller
      */
     public function create(): Response
     {
-        //
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreAuthorRequest $request): RedirectResponse
+    public function store(StoreAuthorRequest $request): object
     {
-        //
+        $data = $request->validated();
+        $author = Author::create([
+            'name' => $data['name'],
+        ]);
+        return new AuthorsResource($author);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Author $author): JsonResponse
+    public function show(Author $author): object
     {
-        return response()->json([
-            'data'=>[
-                'id' => $author->id,
-                'type' => 'Authors',
-                'attributes' => [
-                    'name' => $author->name,
-                    'created_at' => $author->created,
-                    'updated_at' => $author->updated
-                ]
-            ]
-                ]);
+        return new AuthorsResource($author);
     }
 
     /**
@@ -64,16 +59,19 @@ class AuthorsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateAuthorRequest $request, Author $author): RedirectResponse
+    public function update(UpdateAuthorRequest $request, Author $author): object
     {
-        //
+        $data = $request->validated();
+        $author->update(['name' => $data['name']]);
+        return new AuthorsResource($author);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Author $author): RedirectResponse
+    public function destroy(Author $author): Response
     {
-        //
+        $author->delete();
+        return response(null,204);
     }
 }
